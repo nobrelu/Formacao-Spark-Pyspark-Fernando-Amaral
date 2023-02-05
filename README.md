@@ -5,7 +5,7 @@
 
 
 
-<img src="https://www.vectorlogo.zone/logos/apache_spark/apache_spark-ar21.png" alt="MarineGEO circle logo" style="height: 250px; width:500px;"/>
+<img src="https://www.vectorlogo.zone/logos/apache_spark/apache_spark-ar21.png" alt="Spark" style="height: 250px; width:500px;"/>
 
 Material: https://www.eia.ai/material_download
 
@@ -25,6 +25,8 @@ Material: https://www.eia.ai/material_download
 
 Arquitetura: Windows 10 + VM (Oracle Virtual Box) Linux Ubuntu Desktop
 
+
+______________________________
 ## Seção 1: Introdução
 
 ### Introdução ao Spark
@@ -34,6 +36,7 @@ Arquitetura: Windows 10 + VM (Oracle Virtual Box) Linux Ubuntu Desktop
 O Spark é uma ferramenta de processamento de Dados, de alta perfomance, distribuído em cluster, em memória (primariamente), veloz, escalável, hdfs ou cloud, suporte a particionamento.
 
 Replicação e Tolerância a Falha: Dados são copiados entre os nós do cluster. 
+
 
 #### Arquitetura e Componentes
 
@@ -64,8 +67,63 @@ Replicação e Tolerância a Falha: Dados são copiados entre os nós do cluster
 **Data frame**: É  imutável (tolerâcia a falha), uma transformação gera um novo data frame. O processamento de transformação só ocorre quando há uma ação: *Lazy Evaluation*.
 
 
+**Lazy Evalution**:  
+
+**Transformações:**
+Filter, Union, Sample, map, flatMap, mapPartititions, mapPartititionsWithIndex, intersection, distinct, groupByKey, reduceByKey, aggregateByKey, sortByKey, join, cogroup, cartesian, pipe, coalesce, repartition, repartitionAndSortWithinPartitions
+
+**Ação:**
+show, reduce, collect, count, first, take, takeSample, takeOrdered, saveAsTextFile, saveAsSequenceFile, saveAsObjectFile, countByKey, foreach
+Dessa forma, o Spark consegue otimizar o processo e criar uma plano para as transformações.
+
+**Tipos de transformações:**
+* Narrow: os dados estão em uma mesma partição
+* Wide:  os dados estão em mais de uma partição
 
 
 
+
+##### Componentes
+
+**Job**: Tarefa
+**Stage**: Divisão do Job
+**Task**:  menor unidade de trabalho. Uma por núcleo e por partição.
+
+
+
+#### Context e Session
+
+##### SparkContext
+
+Conexão transparente com o Cluster.
+
+##### SparkSession
+
+Acesso ao SparkContext.
+
+Possibilidade de rodar script Spark no shell (pyspark).
+O Spark cria uma sessão automaticamente chamada spark.
+Para criar uma aplicação sparm, você precisa criar:
+
+
+
+<code>spark  = (SparkSession
+.builder
+.appName("Meuapp")
+.getOrCreate()) </code>
+
+#### Formatos de Big Data
+
+Formatos desacoplados de ferramentas, diários, compactados, suportam schema e podem ser particionados entre discos (redundância e paralelismo).
+
+
+*  Parquet: colunar, padrão do spark - Melhor perfomance na consulta (leitura)
+*  Avro: linha
+*  Orc: colunar, padrão do hive - Em geral é mais eficiente na criação (escrita)  e na compreessão
+
+Linha:  muitos atributos e mais escrita
+Coluna: menos atributos e mais leitura
+
+______________________________
 ## Seção 2: Instalação
 
