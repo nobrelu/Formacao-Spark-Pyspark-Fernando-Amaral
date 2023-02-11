@@ -307,10 +307,127 @@ semdebito =  compras.subtractByKey(debitos)
 semdebito.collect()
 
 #### Data Frame - parte 1
+Tabelas com linhas e colunas
+Imutáveis
+Com schema conhecido
+Linhagem preservada
+Colunas podem ter tipos diferentes
+Existem análises comuns: Agrupar, ordenar, filtrar
+Spark pode otimizar estas analises através de planos de execução
+
+**Lazy Evalution**
+
+O processamento de  transforamção de fato só ocorre quando há uma ação: Lazy Evalution
+
+#####  Tipos de Dados  
+
+> ByteType
+> ShortType
+> IntegerType
+> LongType
+> FloatType
+> DoubleType
+> DecimalType
+> StringType
+> BinaryType
+> BooleanType
+> TimestampType
+> DateType
+> ArrayType
+> MapType
+> StructType
+> StructField
+
+##### Schema
+
+Você pode deixar o Spark inferir a partir de parte dos dados ou pode definir o schema.
+Definindo você tem vantagens de ter o tipo correto e sem overhead.
+
 
 
 
 #### Data Frame - parte 2
+
+Criação de um data frame, simples e sem definição de schema.
+
+<code> pyspark </code>
+
+from pyspark import SparkSession
+df1 = spark.createDataFrame([("Pedro",10),("Maria",30),("José",40)])
+df1.show()
++-----+---+
+|   _1| _2|
++-----+---+
+|Pedro| 10|
+|Maria| 30|
+| José| 40|
++-----+---+
+
+
+schema = "Id  INT, Nome String"
+dados = [[1,"Pedro"],[2,"Maria"]]
+df2 = spark.createDataFrame(dados, schema)
+df2.show()
++---+-----+
+| Id| Nome|
++---+-----+
+|  1|Pedro|
+|  2|Maria|
++---+-----+
+
+from pyspark.sql.functions import sum
+schema2  =  "Produtos STRING, Vendas  INT"
+vendas = [["Caneta",10], ["Lápis", 20],  ["Caneta",  40]]
+df3  = spark.createDataFrame(vendas, schema2)
+df3.show()
++--------+------+
+|Produtos|Vendas|
++--------+------+
+|  Caneta|    10|
+|   Lápis|    20|
+|  Caneta|    40|
++--------+------+
+
+agrupado = df3.groupBy("Produtos").agg(sum("Vendas"))
+agrupado.show()
++--------+-----------+
+|Produtos|sum(Vendas)|
++--------+-----------+
+|  Caneta|         50|
+|   Lápis|         20|
++--------+-----------+
+
+
+df3.groupBy("Produtos").agg(sum("Vendas")).show()
++--------+-----------+
+|Produtos|sum(Vendas)|
++--------+-----------+
+|  Caneta|         50|
+|   Lápis|         20|
++--------+-----------+
+
+df3.select("Produtos").show()
++--------+
+|Produtos|
++--------+
+|  Caneta|
+|   Lápis|
+|  Caneta|
++--------+
+
+--função de expressão, criar nova coluna
+from pyspark.sql.functions import expr  
+df3.select("Produtos","Vendas",expr("Vendas *  0.2")).show()
++--------+------+--------------+
+|Produtos|Vendas|(Vendas * 0.2)|
++--------+------+--------------+
+|  Caneta|    10|           2.0|
+|   Lápis|    20|           4.0|
+|  Caneta|    40|           8.0|
++--------+------+--------------+
+
+
+
 
 
 
